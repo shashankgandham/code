@@ -1,40 +1,35 @@
 #include <bits/stdc++.h>
 typedef long long ll;
 using namespace std;
-int n, a[5001], dp[5001], g[5001], gi, gn[5001];
+int n, ans, a[5001], dp[5001][5001], num[100005], maxi[8], p, q;
 
 int main() {
 	scanf("%d", &n);
 	for(int i = 1; i <= n; i++) 
 		scanf("%d", &a[i]);
-	dp[n] = gi = 1;
-	g[n] = 0;
-	for(int i = n - 1; i > 0; i--) {
-		for(int j = i + 1; j <= n; j++) {
-			if(abs(a[i] - a[j]) == 1 || a[i]%7 == a[j]%7) {
-				if(dp[i] < dp[j] + 1) {
-					dp[i] = dp[j] + 1;
-					g[i] = g[j];
-				}
-			}
-		}
-		if(!dp[i]) {
-			dp[i] = 1;
-			g[i] = gi++;
-		}
-	}
-//	for(int i = 1; i <= n; i++) 
-//		printf("%d %d --> %d %d\n", i, a[i], dp[i], g[i]);
-	if(gi == 1)
-		printf("%d\n", n);
 	
-	else {
-		for(int i = 1; i <= n; i++) {
-			if(!gn[g[i]]) 
-				gn[g[i]] = dp[i];
+	for(int y = 0; y <= n; y++) {
+		for (int i = 1; i <= n; i++)
+            num[a[i]] = 0;
+        for (int i = 0; i < 8; i++)
+            maxi[i] = 0;
+		dp[0][y] = dp[y][0];
+		for(int x = 1; x <= n; x++) {
+			if(y > x)
+				dp[x][y] = dp[y][x];
+			else if(x == y)
+				dp[x][y] = 0;
+			else {
+				p = max(dp[0][y], maxi[a[x]%7]);
+				q = max(num[a[x] - 1], num[a[x] + 1]);
+				dp[x][y] = 1 + max(p, q);
+			}
+			num[a[x]] = max(num[a[x]], dp[x][y]);
+			maxi[a[x]%7] = max(maxi[a[x]%7], dp[x][y]);
+
+			ans = max(ans, dp[x][y]);
 		}
-		sort(gn, gn + gi);
-		printf("%d\n", gn[gi - 1] + gn[gi - 2]);
 	}
+	printf("%d\n", ans);
 	return 0;
 }
