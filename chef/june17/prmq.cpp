@@ -76,16 +76,6 @@ void optimize() {
  
 	}
 }
-void test() {
-	for(int i = 1; i <= n; i++) {
-		map<int, int>:: iterator it = powers[i].begin();
-		while(it != powers[i].end()) {
-			printf("%d %d %d\n", i, it->first, it->second);
-			it++;
-		}
-		printf("\n");
-	}
-}
 int main() {
 	sieve();
 	scanf("%d",&n);
